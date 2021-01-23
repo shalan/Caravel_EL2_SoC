@@ -1,6 +1,6 @@
 # Caravel_EL2_SoC
 
-The repo contains the EL2 SoC integratin with the [Caravel](https://github.com/efabless/caravel/tree/master) chip. For the SoC related development, refer to [Chameleon SoC](https://github.com/shalan/EL2_SoC)
+The repo contains the EL2 SoC integratin with the [Caravel](https://github.com/efabless/caravel/tree/master) chip. For the SoC related development, refer to [EL2 SoC](https://github.com/shalan/EL2_SoC)
 
 # Caravel Integration 
 
