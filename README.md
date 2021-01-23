@@ -8,7 +8,7 @@ The repo contains the EL2 SoC integratin with the [Caravel](https://github.com/e
 
 The SoC utilizes the caravel IO ports and logic analyzer probes. Refer to [user_project_wrapper.v](verilog/rtl/user_project_wrapper.v)
 
-| Caravel-IO    | Chameloen SoC |  Mode
+| Caravel-IO    | EL2 SoC |  Mode
 | ------------- | ------------- | -------------
 |  io[13:0]     | GPIO          | Bi-directional
 |  io[17:14]    | flash         | Bi-directional
