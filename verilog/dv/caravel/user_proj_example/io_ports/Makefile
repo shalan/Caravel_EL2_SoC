@@ -34,14 +34,14 @@ all:  ${PATTERN:=.vcd}
 
 hex:  ${PATTERN:=.hex}
 
-%.vvp: %_tb.v %.hex
+%.vvp: %_tb.v %.hex test.hex
 ifeq ($(SIM),RTL)
-	iverilog -DFUNCTIONAL -DSIM -I $(BEHAVIOURAL_MODELS) \
-	-I $(PDK_PATH) -I $(IP_PATH) -I $(RTL_PATH) \
+	iverilog -DFUNCTIONAL -DSIM -DFAST -DUSE_POWER_PINS -I $(BEHAVIOURAL_MODELS) \
+	-I $(PDK_PATH) -I .. -I $(RTL_PATH) \
 	$< -o $@
 else
-	iverilog -DFUNCTIONAL -DSIM -DGL -I $(BEHAVIOURAL_MODELS) \
-	-I $(PDK_PATH) -I $(IP_PATH) -I $(RTL_PATH) \
+	iverilog -DFUNCTIONAL -DSIM -DUSE_POWER_PINS  -DGL_UA -I $(BEHAVIOURAL_MODELS) \
+	-I $(PDK_PATH) -I .. -I $(VERILOG_PATH) -I $(RTL_PATH) \
 	$< -o $@
 endif
 
@@ -56,6 +56,9 @@ endif
 	# to fix flash base address
 	sed -i 's/@10000000/@00000000/g' $@
 
+test.hex: ../sw/test.c ../sw/crt0.S ../sw/link.ld 
+	$(MAKE) -C ../sw/ all
+
 %.bin: %.elf
 	${GCC_PATH}/${GCC_PREFIX}-objcopy -O binary $< /dev/stdout | tail -c +1048577 > $@
 
@@ -63,5 +66,5 @@ endif
 
 clean:
 	rm -f *.elf *.hex *.bin *.vvp *.vcd *.log
-
+	rm -f ../sw/*.bin ../sw/*.hex ../sw/*.elf ../sw/*.lst
 .PHONY: clean hex all
