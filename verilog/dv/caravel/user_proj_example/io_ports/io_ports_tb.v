@@ -114,22 +114,7 @@ module io_ports_tb;
 	end
 
 	// GPIO Loopback!
-    wire [15:0] GPIO_PINS;
-    wire [15:0] GPIOOEN_Sys0_S2;
-    wire [15:0] GPIOOUT_Sys0_S2;
-    wire [15:0] GPIOIN_Sys0_S2;
-
-    generate
-        genvar i;
-        for(i=0; i<16; i=i+1)
-            assign GPIO_PINS[i] = (CSB == 1'b1) ? 1'bz : GPIOOUT_Sys0_S2[i];
-    endgenerate
-
-    assign GPIO_PINS[15:8] = GPIO_PINS[7:0];
-    assign GPIOIN_Sys0_S2 = GPIO_PINS;
-
-	assign mprj_io[13:0] = GPIOIN_Sys0_S2[13:0];
-	assign GPIOOUT_Sys0_S2[13:0] = mprj_io[13:0];
+	assign mprj_io[13:8] =  mprj_io[7:0];
 
 	// Serial Terminal connected to UART0 TX*/
     terminal term(.rx(mprj_io[21]));  // RsTx_Sys0_SS0_S0
