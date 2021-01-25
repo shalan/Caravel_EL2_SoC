@@ -46,7 +46,7 @@ unsigned char M23LC_read_byte(int n, unsigned short addr){
 int main(){
     // Initialization
     uart_init (0, 0);
-    gpio_set_dir(0x00FF);
+    gpio_set_dir(0xFF00);
 
     spi_init(0, 0,0,40);
     
@@ -76,12 +76,7 @@ int main(){
 
     // GPIO
     uart_puts (0, "GPIO Test: ", 11);
-
-    int gpio_val = 0x55;
-    if (SIM_SOC == 0){
-        gpio_val = 0x15; // Wrapper has a lower number of GPIOs
-    }
-    
+    int   gpio_val = 0x15; // Wrapper has a lower number of GPIOs
     gpio_write(gpio_val);
     DELAY(50);
     int gpio_data = gpio_read();

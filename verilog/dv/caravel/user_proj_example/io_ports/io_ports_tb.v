@@ -18,7 +18,7 @@
 `timescale 1 ns / 1 ps
 
 `define   TEST_FILE   "../sw/test.hex" 
-`define   SIM_TIME    1500_000
+`define   SIM_TIME    4500_000
 `define   SIM_LEVEL   0
 
 `define SOC_SETUP_TIME 800*2001
@@ -29,6 +29,7 @@
 
 `include "sst26wf080b.v"
 `include "23LC512.v"
+`include "24LC16B.v"
 `include "caravel.v"
 
 `ifdef SIM
@@ -79,10 +80,11 @@
 
 `include "user_project/IPs/QSPI_XIP_CTRL.v"
 `include "user_project/IPs/DMC_32x16.v"
-`include "user_project/IPs/RAM_1024x32.v"
+`include "user_project/IPs/RAM_1024x64.v"
 
+`include "user_project/el2_defines.v"
+`include "gl/user_project/gl/el2_swerv_wrapper.v"
 `include "user_project/el2_n5_soc_wrapper.v"
-`include "user_project/el2.v"
 `include "user_project/soc_core.v"
 
 `endif
@@ -91,6 +93,7 @@
 module io_ports_tb;
 	reg clock;
     reg RSTB;
+	reg CSB;
 	reg power1, power2;
 	reg power3, power4;
 
@@ -99,7 +102,7 @@ module io_ports_tb;
 	wire [7:0] mprj_io_0;
 
 	assign mprj_io_0 = mprj_io[7:0];
-
+	assign mprj_io[3] = (CSB == 1'b1) ? 1'b1: 1'bz;
 	// External clock is used by default.  Make this artificially fast for the
 	// simulation.  Normally this would be a slow clock and the digital PLL
 	// would be the fast clock.
@@ -111,15 +114,22 @@ module io_ports_tb;
 	end
 
 	// GPIO Loopback!
-    // wire [13:0] GPIO_PINS;
-    // generate
-    //     genvar i;
-    //     for(i=0; i<14; i=i+1)
-    //         assign GPIO_PINS[i] = GPIOOEN_Sys0_S2[i] ? GPIOOUT_Sys0_S2[i] : 1'bz;
-    // endgenerate
+    wire [15:0] GPIO_PINS;
+    wire [15:0] GPIOOEN_Sys0_S2;
+    wire [15:0] GPIOOUT_Sys0_S2;
+    wire [15:0] GPIOIN_Sys0_S2;
 
-    // assign GPIO_PINS[15:8] = GPIO_PINS[7:0];
-    // assign GPIOIN_Sys0_S2 = GPIO_PINS;
+    generate
+        genvar i;
+        for(i=0; i<16; i=i+1)
+            assign GPIO_PINS[i] = (CSB == 1'b1) ? 1'bz : GPIOOUT_Sys0_S2[i];
+    endgenerate
+
+    assign GPIO_PINS[15:8] = GPIO_PINS[7:0];
+    assign GPIOIN_Sys0_S2 = GPIO_PINS;
+
+	assign mprj_io[13:0] = GPIOIN_Sys0_S2[13:0];
+	assign GPIOOUT_Sys0_S2[13:0] = mprj_io[13:0];
 
 	// Serial Terminal connected to UART0 TX*/
     terminal term(.rx(mprj_io[21]));  // RsTx_Sys0_SS0_S0
@@ -137,11 +147,11 @@ module io_ports_tb;
 
 	// I2C E2PROM connected to I2C0
     wire    scl, sda;
-    delay   m0_scl (scl_oen_o_Sys0_SS0_S4 ? 1'bz : scl_o_Sys0_SS0_S4, scl),
-            m0_sda (sda_oen_o_Sys0_SS0_S4 ? 1'bz : sda_o_Sys0_SS0_S4, sda);
+    delay   m0_scl (mprj_io[32], scl),
+            m0_sda (mprj_io[33], sda);
 
-    assign  scl_i_Sys0_SS0_S4 = scl;
-    assign  sda_i_Sys0_SS0_S4 = sda;
+    assign  mprj_io[32] = (CSB == 1'b1) ? 1'bz : scl;
+    assign  mprj_io[33] = (CSB == 1'b1) ? 1'bz : sda;
     
 	pullup p1(scl); // pullup scl line
 	pullup p2(sda); // pullup sda line
@@ -153,13 +163,13 @@ module io_ports_tb;
         .WP(1'b0), 
         .SDA(sda), 
         .SCL(scl), 
-        .RESET(~HRESETn)
+        .RESET(~RSTB)
     );
 
 	initial begin
 		// Load the application into the N5 flash memory
 		#1  $readmemh(`TEST_FILE, flash.I0.memory);
-		$display("---------N5 Flash -----------");
+		$display("---------EL2 Flash -----------");
 		$display("Memory[0]: %0d, Memory[1]: %0d, Memory[2]: %0d, Memory[3]: %0d", 
             flash.I0.memory[0], flash.I0.memory[1], flash.I0.memory[2], flash.I0.memory[3]);
 	end
@@ -169,8 +179,11 @@ module io_ports_tb;
 		$dumpvars(0, io_ports_tb);
 
 		RSTB <= 1'b0;
+		CSB  <= 1'b1;
 		#2000;
 		RSTB <= 1'b1;	    // Release reset
+		#365000;
+		CSB <= 1'b0;
 		#(`SOC_SETUP_TIME);
 		#(`SIM_TIME);
 	    $finish;
@@ -181,13 +194,13 @@ module io_ports_tb;
 		power2 <= 1'b0;
 		power3 <= 1'b0;
 		power4 <= 1'b0;
-		#200;
+		#100;
 		power1 <= 1'b1;
-		#200;
+		#100;
 		power2 <= 1'b1;
-		#200;
+		#100;
 		power3 <= 1'b1;
-		#200;
+		#100;
 		power4 <= 1'b1;
 	end
 
@@ -238,7 +251,7 @@ module io_ports_tb;
 		.io3()			// not used
 	);
 
-	/* N5 Flash */
+	/* EL2 Flash */
     sst26wf080b flash(
         .SCK(mprj_io[18]),     // fsclk
         .SIO(mprj_io[17:14]),  // fdo
@@ -267,4 +280,16 @@ module terminal #(parameter bit_time = 400) (input rx);
 
 
 endmodule
+
+module delay (in, out);
+  input  in;
+  output out;
+
+  assign out = in;
+
+  specify
+    (in => out) = (600,600);
+  endspecify
+endmodule
+
 `default_nettype wire

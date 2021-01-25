@@ -37,7 +37,7 @@ hex:  ${PATTERN:=.hex}
 %.vvp: %_tb.v %.hex test.hex
 ifeq ($(SIM),RTL)
 	iverilog -DFUNCTIONAL -DSIM -DFAST -DUSE_POWER_PINS -I $(BEHAVIOURAL_MODELS) \
-	-I $(PDK_PATH) -I .. -I $(RTL_PATH) \
+	-I $(PDK_PATH) -I .. -I $(VERILOG_PATH) -I $(RTL_PATH) \
 	$< -o $@
 else
 	iverilog -DFUNCTIONAL -DSIM -DUSE_POWER_PINS  -DGL_UA -I $(BEHAVIOURAL_MODELS) \
