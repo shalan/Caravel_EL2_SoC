@@ -1,0 +1,99 @@
+Design Name: apb_sys_0
+Run Directory: /project/openlane/apb_sys_0/runs/apb_sys_0
+----------------------------------------
+
+Magic DRC Summary:
+Source: /project/openlane/apb_sys_0/runs/apb_sys_0/logs/magic/magic.drc
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /project/openlane/apb_sys_0/runs/apb_sys_0/results/lvs/apb_sys_0.lvs_parsed.log
+LVS reports no net, device, pin, or property mismatches.
+Total errors = 0
+----------------------------------------
+
+Antenna Summary:
+Source: /project/openlane/apb_sys_0/runs/apb_sys_0/reports/routing/antenna.rpt
+Number of pins violated: 3
+Number of nets violated: 3
+
+Design Name: DMC_32x16
+Run Directory: /project/openlane/DMC_32x16/runs/DMC_32x16
+----------------------------------------
+
+Magic DRC Summary:
+Source: /project/openlane/DMC_32x16/runs/DMC_32x16/logs/magic/magic.drc
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /project/openlane/DMC_32x16/runs/DMC_32x16/results/lvs/DMC_32x16.lvs_parsed.log
+LVS reports no net, device, pin, or property mismatches.
+Total errors = 0
+----------------------------------------
+
+Antenna Summary:
+Source: /project/openlane/DMC_32x16/runs/DMC_32x16/reports/routing/antenna.rpt
+Number of pins violated: 3
+Number of nets violated: 3
+
+Design Name: el2_swerv_wrapper
+Run Directory: /project/openlane/el2_swerv_wrapper/runs/el2_swerv_wrapper
+----------------------------------------
+
+Magic DRC Summary:
+Source: /project/openlane/el2_swerv_wrapper/runs/el2_swerv_wrapper/logs/magic/magic.drc
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /project/openlane/el2_swerv_wrapper/runs/el2_swerv_wrapper/results/lvs/el2_swerv_wrapper.lvs_parsed.log
+LVS reports no net, device, pin, or property mismatches.
+Total errors = 0
+----------------------------------------
+
+Antenna Summary:
+Source: /project/openlane/el2_swerv_wrapper/runs/el2_swerv_wrapper/reports/routing/antenna.rpt
+Number of pins violated: 11
+Number of nets violated: 10
+
+Design Name: DFFRAM_4K
+Run Directory: /project/openlane/DFFRAM_4K/runs/DFFRAM_4K
+----------------------------------------
+
+Magic DRC Summary:
+Source: /project/openlane/DFFRAM_4K/runs/DFFRAM_4K/logs/magic/magic.drc
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /project/openlane/DFFRAM_4K/runs/DFFRAM_4K/results/lvs/DFFRAM_4K.lvs_parsed.log
+LVS reports no net, device, pin, or property mismatches.
+Total errors = 0
+----------------------------------------
+
+Antenna Summary:
+Source: /project/openlane/DFFRAM_4K/runs/DFFRAM_4K/reports/routing/antenna.rpt
+Number of pins violated: 8
+Number of nets violated: 8
+
+Design Name: user_project_wrapper
+Run Directory: /project/openlane/user_project_wrapper/runs/user_project_wrapper
+----------------------------------------
+
+Magic DRC Summary:
+Source: /project/openlane/user_project_wrapper/runs/user_project_wrapper/logs/magic/magic.drc
+Total Magic DRC violations is 0
+----------------------------------------
+
+LVS Summary:
+Source: /project/openlane/user_project_wrapper/runs/user_project_wrapper/results/lvs/user_project_wrapper.lvs_parsed.log
+LVS reports no net, device, pin, or property mismatches.
+Total errors = 0
+----------------------------------------
+
+Antenna Summary:
+Source: /project/openlane/user_project_wrapper/runs/user_project_wrapper/reports/routing/antenna.rpt
+Number of pins violated: 39
+Number of nets violated: 29
