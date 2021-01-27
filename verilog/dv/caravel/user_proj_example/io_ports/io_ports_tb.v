@@ -132,22 +132,20 @@ module io_ports_tb;
 
 	// I2C E2PROM connected to I2C0
     wire    scl, sda;
-    delay   m0_scl (mprj_io[32], scl),
-            m0_sda (mprj_io[33], sda);
-
-    assign  mprj_io[32] = (CSB == 1'b1) ? 1'bz : scl;
-    assign  mprj_io[33] = (CSB == 1'b1) ? 1'bz : sda;
     
-	pullup p1(scl); // pullup scl line
-	pullup p2(sda); // pullup sda line
+	pullup p1(mprj_io[32]); // pullup scl line
+	pullup p2(mprj_io[33]); // pullup sda line
+
+	assign mprj_io[32] = scl;
+	assign mprj_io[33] = sda;
 
     M24LC16B I2C_E2PROM(
         .A0(1'b0), 
         .A1(1'b0), 
         .A2(1'b0), 
         .WP(1'b0), 
-        .SDA(sda), 
-        .SCL(scl), 
+        .SDA(mprj_io[33]), 
+        .SCL(mprj_io[32]), 
         .RESET(~RSTB)
     );
 
